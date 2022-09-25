@@ -1,4 +1,5 @@
 ﻿using MainLibrary;
+using MainLibrary.Result;
 
 namespace ExampleOfUse
 {
