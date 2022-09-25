@@ -1,10 +1,16 @@
-﻿namespace MainLibrary.Result
+﻿using System.Xml.Serialization;
+
+namespace MainLibrary.Result
 {
     public class ThreadInfo
     {
-        public int Id;        
+        [XmlAttribute(AttributeName = "id")]
+        public int Id;
+
+        [XmlElement(ElementName = "method")]
         public List<MethodInfo> Methods;
 
+        [XmlAttribute(AttributeName = "time")]
         public double LeadTime
         {
             get
@@ -16,6 +22,7 @@
                 }
                 return time;
             }
+            set { }
         }
 
         public ThreadInfo()

@@ -1,5 +1,6 @@
 ﻿using MainLibrary;
 using MainLibrary.Result;
+using MainLibrary.Serialization;
 
 namespace ExampleOfUse
 {
@@ -17,7 +18,9 @@ namespace ExampleOfUse
             Meth();
             myThread1.Join();
             TraceResult trRes = tr.GetTraceResult();
-            Console.Read();
+            ISerialization ser = new XmlSerialization();
+            Console.WriteLine(ser.Serialize(trRes));
+
         }
 
         static public void Meth()
