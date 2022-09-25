@@ -9,5 +9,10 @@ namespace MainLibrary
     public class TraceResult
     {
         public List<ThreadInfo> Threads;
+
+        public TraceResult()
+        {
+            Threads = new List<ThreadInfo>();
+        }
     }
 }
