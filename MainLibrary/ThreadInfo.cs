@@ -28,5 +28,11 @@ namespace MainLibrary
         {
             Methods = new List<MethodInfo>();
         }
+
+        public ThreadInfo(int id)
+        {
+            Id = id;
+            Methods = new List<MethodInfo>();
+        }
     }
 }

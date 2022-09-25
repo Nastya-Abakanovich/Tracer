@@ -5,59 +5,69 @@ namespace MainLibrary
     public class Tracer : ITracer
     {
         private TraceResult? _traceResult;
-        private ThreadInfo _currThreadInfo;
-        private Stopwatch _stopwatch;
-        private MethodInfo _info;
-        private StackTrace _stackTrace;
-        private int _currThreadNumber;
+        private Stack<StackMethodInfo> _methodOrder;
 
         public Tracer()
         {
-            if (_traceResult == null)
-            {
-                _traceResult = new TraceResult();
-            }
-
-            _stopwatch = new Stopwatch();
-            
+            _traceResult = new TraceResult();
+            _methodOrder = new Stack<StackMethodInfo>();
         }
 
+        private ThreadInfo GetThreadId()
+        {
+            ThreadInfo currThreadInfo;
+            int currId = Thread.CurrentThread.ManagedThreadId;
+            currThreadInfo = _traceResult.Threads.Find(x => (x.Id == currId));
+            if (currThreadInfo == null)
+            {
+                _traceResult?.Threads.Add(new ThreadInfo(currId));
+                currThreadInfo = _traceResult?.Threads[_traceResult.Threads.Count - 1];
+            }
+            return currThreadInfo;
+        }
 
         public void StartTrace()
         {
-            _stopwatch.Start();
+            MethodInfo currMethodInfo = new MethodInfo();
+            StackTrace stackTrace = new StackTrace();
+            currMethodInfo.Name = stackTrace.GetFrame(1).GetMethod().Name;
+            currMethodInfo.ClassName = stackTrace.GetFrame(1).GetMethod().DeclaringType.Name;
+            currMethodInfo.LeadTime = -1;
 
-            int currId = Thread.CurrentThread.ManagedThreadId;
-            _currThreadInfo = _traceResult.Threads.Find(x => (x.Id == currId));
-            if (_currThreadInfo != null)
-            {
-                _currThreadNumber = _traceResult.Threads.IndexOf(_currThreadInfo);
-            }
-            else
-            {
-                _traceResult?.Threads.Add(new ThreadInfo());
-                _currThreadNumber = _traceResult.Threads.Count - 1;
-                _traceResult.Threads[_currThreadNumber].Id = currId;
-            }
+            StackMethodInfo stackMethod = new StackMethodInfo(
+                             Thread.CurrentThread.ManagedThreadId,
+                             new Stopwatch(),
+                             currMethodInfo
+                             );
+
+            _methodOrder.Push(stackMethod);
+
+            stackMethod.MethodStopwatch.Start();    
         }
 
 
         public void StopTrace()
         {
-            _stopwatch?.Stop();
+            StackMethodInfo parentStackMethodInfo;
+            StackMethodInfo currStackMethodInfo = _methodOrder.Pop();
 
-            _stackTrace = new StackTrace();
-            _info = new MethodInfo();
-            _info.Name = _stackTrace.GetFrame(1).GetMethod().Name;
-            _info.ClassName = _stackTrace.GetFrame(1).GetMethod().DeclaringType.Name;
-            _info.LeadTime = _stopwatch.Elapsed.TotalSeconds;
+            currStackMethodInfo.MethodStopwatch?.Stop();
+            currStackMethodInfo.Method.LeadTime = currStackMethodInfo.MethodStopwatch.Elapsed.TotalSeconds;
 
-            _traceResult.Threads[_currThreadNumber].Methods.Add(_info);
+            if (_methodOrder.TryPop(out parentStackMethodInfo))
+            {
+                parentStackMethodInfo.Method.Methods.Add(currStackMethodInfo.Method);
+                _methodOrder.Push(parentStackMethodInfo);
+            }
+            else
+            {
+                GetThreadId().Methods.Add(currStackMethodInfo.Method);
+            }
+
         }
 
         public TraceResult GetTraceResult()
         {
-
             return _traceResult;
         }
     }

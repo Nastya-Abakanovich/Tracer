@@ -50,6 +50,9 @@ namespace ExampleOfUse
         {
             _tracer.StartTrace();
             Thread.Sleep(100);
+            M2();
+            M3();
+            M4();
             Console.WriteLine("M1");
             _tracer.StopTrace();
         }
@@ -59,6 +62,22 @@ namespace ExampleOfUse
             _tracer.StartTrace();
             Thread.Sleep(200);
             Console.WriteLine("M2");
+            _tracer.StopTrace();
+        }
+        private void M3()
+        {
+            _tracer.StartTrace();
+            Thread.Sleep(400);
+            Console.WriteLine("M3");
+            M4();
+            _tracer.StopTrace();
+        }
+
+        private void M4()
+        {
+            _tracer.StartTrace();
+            Thread.Sleep(500);
+            Console.WriteLine("M4");
             _tracer.StopTrace();
         }
     }
