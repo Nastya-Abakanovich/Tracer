@@ -6,23 +6,12 @@ namespace MainLibrary.Result
 {
     public class MethodInfo
     {
-        [JsonPropertyName("name")]
-        [XmlAttribute(AttributeName = "name")]
         public string Name { get;}
-
-        [JsonPropertyName("class")]
-        [XmlAttribute(AttributeName = "class")]
         public string ClassName { get;}
-
-        [JsonPropertyName("time")]
-        [XmlAttribute(AttributeName = "time")]
         public double LeadTime { get;}
-
-        [JsonPropertyName("methods")]
-        [XmlElement(ElementName = "method")]
         public IReadOnlyList<MethodInfo> Methods { get;}
 
-        public MethodInfo(ChangeableMethodInfo methodInfo)
+        internal MethodInfo(ChangeableMethodInfo methodInfo)
         {
             Name = methodInfo.Name;
             ClassName = methodInfo.ClassName;
@@ -36,14 +25,6 @@ namespace MainLibrary.Result
             }
             Methods = methods;
 
-        }
-
-        public MethodInfo()
-        {
-            Name = "";
-            ClassName = "";
-            LeadTime = -1;
-           // Methods = new List<MethodInfo>();
         }
     }
 }

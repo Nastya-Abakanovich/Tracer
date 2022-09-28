@@ -11,7 +11,7 @@ namespace MainLibrary.ChangeableResult
         [XmlElement(ElementName = "thread")]
         public List<ChangeableThreadInfo> Threads { get; set; }
 
-        public ChangeableTraceResult(TraceResult result)
+        internal ChangeableTraceResult(TraceResult result)
         {
             List<ChangeableThreadInfo> threads = new List<ChangeableThreadInfo>();
 

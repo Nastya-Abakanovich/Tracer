@@ -1,38 +1,14 @@
-﻿using System.Text.Json.Serialization;
-using System.Xml.Serialization;
-using MainLibrary.ChangeableResult;
+﻿using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Result
 {
     public class ThreadInfo
     {
-        [JsonPropertyName("id")]
-        [XmlAttribute(AttributeName = "id")]
         public int Id { get;}
-
-        [JsonPropertyName("time")]
-        [XmlAttribute(AttributeName = "time")]
-        public double LeadTime
-        {
-            get;
-        }
-
-        [JsonPropertyName("methods")]
-        [XmlElement(ElementName = "method")]
+        public double LeadTime { get; }
         public IReadOnlyList<MethodInfo> Methods { get; }
 
-        public ThreadInfo()
-        {
-          // Methods = new List<MethodInfo>();
-        }
-
-        public ThreadInfo(int id)
-        {
-            Id = id;
-            Methods = new List<MethodInfo>();
-        }
-
-        public ThreadInfo(ChangeableThreadInfo thread)
+        internal ThreadInfo(ChangeableThreadInfo thread)
         {
             Id = thread.Id;
             LeadTime = thread.LeadTime;

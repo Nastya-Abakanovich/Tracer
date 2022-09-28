@@ -35,13 +35,13 @@ namespace MainLibrary.ChangeableResult
             Methods = new List<ChangeableMethodInfo>();
         }
 
-        public ChangeableThreadInfo(int id)
+        internal ChangeableThreadInfo(int id)
         {
             Id = id;
             Methods = new List<ChangeableMethodInfo>();
         }
 
-        public ChangeableThreadInfo(ThreadInfo thread)
+        internal ChangeableThreadInfo(ThreadInfo thread)
         {
             Id = thread.Id;
             LeadTime = thread.LeadTime;

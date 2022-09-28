@@ -6,21 +6,21 @@ namespace MainLibrary.ChangeableResult
 {
     public class ChangeableMethodInfo
     {
+        [JsonPropertyName("name")]
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
+        [JsonPropertyName("class")]
+        [XmlAttribute(AttributeName = "class")]
         public string ClassName { get; set; }
 
+        [JsonPropertyName("time")]
+        [XmlAttribute(AttributeName = "time")]
         public double LeadTime { get; set; }
 
+        [JsonPropertyName("methods")]
+        [XmlElement(ElementName = "method")]
         public List<ChangeableMethodInfo> Methods { get; set; }
-
-        //public ChangeableMethodInfo(string name, string className, double leadTime, List<ChangeableMethodInfo> methods)
-        //{
-        //    Name = name;
-        //    ClassName = className;
-        //    LeadTime = leadTime;
-        //    Methods = methods;
-        //}
 
         public ChangeableMethodInfo()
         {
@@ -30,20 +30,17 @@ namespace MainLibrary.ChangeableResult
             Methods = new List<ChangeableMethodInfo>();
         }
 
-        public ChangeableMethodInfo(MethodInfo methodInfo)
+        internal ChangeableMethodInfo(MethodInfo methodInfo)
         {
             Name = methodInfo.Name;
             ClassName = methodInfo.ClassName;
             LeadTime = methodInfo.LeadTime;
 
-            List<ChangeableMethodInfo> methods = new List<ChangeableMethodInfo>();
-
+            Methods = new List<ChangeableMethodInfo>();
             foreach (MethodInfo method in methodInfo.Methods)
             {
-                methods.Add(new ChangeableMethodInfo(method));
+                Methods.Add(new ChangeableMethodInfo(method));
             }
-            Methods = methods;
-
         }
     }
 }
