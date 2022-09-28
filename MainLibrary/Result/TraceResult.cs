@@ -8,12 +8,22 @@ namespace MainLibrary.Result
     {
         [JsonPropertyName("threads")]
         [XmlElement(ElementName = "thread")]
-        public List<ThreadInfo> Threads;
+        public List<ThreadInfo> Threads { get; set; } = new List<ThreadInfo>();
 
-        
-        public TraceResult()
-        {
-            Threads = new List<ThreadInfo>();
-        }
+
+        //public TraceResult()
+        //{
+        //    Threads = new List<ThreadInfo>();
+        //}
+
+        //public TraceResult(TraceResult result)
+        //{
+        //    Threads = new List<ThreadInfo>();
+
+        //    foreach (var thread in result.Threads)
+        //    {
+        //        Threads.Add(thread);
+        //    }
+        //}
     }
 }

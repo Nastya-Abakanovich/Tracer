@@ -13,9 +13,8 @@ namespace MainLibrary.Serialization
     {
         public string Serialize(TraceResult result)
         {
-            var traceResult = new TraceResult();
             var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(traceResult, options);
+            return JsonSerializer.Serialize(result, options);
         }
     }
 }

@@ -1,20 +1,25 @@
-﻿using System.Xml.Serialization;
+﻿using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace MainLibrary.Result
 {
     public class MethodInfo
     {
+        [JsonPropertyName("name")]
         [XmlAttribute(AttributeName = "name")]
-        public string Name;
+        public string Name { get; set; }
 
+        [JsonPropertyName("class")]
         [XmlAttribute(AttributeName = "class")]
-        public string ClassName;
+        public string ClassName { get; set; }
 
+        [JsonPropertyName("time")]
         [XmlAttribute(AttributeName = "time")]
-        public double LeadTime;
+        public double LeadTime { get; set; }
 
+        [JsonPropertyName("methods")]
         [XmlElement(ElementName = "method")]
-        public List<MethodInfo> Methods;
+        public List<MethodInfo> Methods { get; set; }
 
         public MethodInfo(MethodInfo _MethodInfo)
         {

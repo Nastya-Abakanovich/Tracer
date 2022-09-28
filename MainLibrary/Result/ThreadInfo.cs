@@ -1,15 +1,15 @@
-﻿using System.Xml.Serialization;
+﻿using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace MainLibrary.Result
 {
     public class ThreadInfo
     {
+        [JsonPropertyName("id")]
         [XmlAttribute(AttributeName = "id")]
-        public int Id;
+        public int Id { get; set; }
 
-        [XmlElement(ElementName = "method")]
-        public List<MethodInfo> Methods;
-
+        [JsonPropertyName("time")]
         [XmlAttribute(AttributeName = "time")]
         public double LeadTime
         {
@@ -22,7 +22,12 @@ namespace MainLibrary.Result
                 }
                 return time;
             }
+            set { }
         }
+
+        [JsonPropertyName("methods")]
+        [XmlElement(ElementName = "method")]
+        public List<MethodInfo> Methods { get; set; }
 
         public ThreadInfo()
         {

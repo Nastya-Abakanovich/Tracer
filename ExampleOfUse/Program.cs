@@ -19,14 +19,14 @@ namespace ExampleOfUse
             Meth();
             myThread1.Join();
             TraceResult trRes = tr.GetTraceResult();
-            ISerialization ser = new XmlSerialization();
+            ISerialization ser = new JsonSerialization();
             string str = ser.Serialize(trRes);
 
             IWriter cWriter = new ConsoleWriter();
             cWriter.Write(str);
 
-            IWriter fWriter = new FileWriter("1.xml");
-            fWriter.Write(str);
+           // IWriter fWriter = new FileWriter("1.xml");
+           // fWriter.Write(str);
 
 
         }
