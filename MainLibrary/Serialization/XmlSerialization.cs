@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using MainLibrary.Result;
 using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Serialization
 {
     public class XmlSerialization: ISerialization
     {
-        public string Serialize(TraceResult result)
+        public string Serialize(Result.TraceResult result)
         {
             ChangeableTraceResult changeableResult = new ChangeableTraceResult(result);
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChangeableTraceResult));

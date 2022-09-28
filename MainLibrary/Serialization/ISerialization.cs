@@ -1,9 +1,7 @@
-﻿using MainLibrary.Result;
-
-namespace MainLibrary.Serialization
+﻿namespace MainLibrary.Serialization
 {
     public interface ISerialization
     {
-        string Serialize(TraceResult result);
+        string Serialize(Result.TraceResult result);
     }
 }
