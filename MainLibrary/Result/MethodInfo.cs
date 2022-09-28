@@ -2,7 +2,6 @@
 
 namespace MainLibrary.Result
 {
-    
     public class MethodInfo
     {
         [XmlAttribute(AttributeName = "name")]
@@ -22,7 +21,6 @@ namespace MainLibrary.Result
             Name = _MethodInfo.Name;
             ClassName = _MethodInfo.ClassName;
             LeadTime = _MethodInfo.LeadTime;
-         //   MethodStopwatch = new Stopwatch();
             Methods = new List<MethodInfo>();
         }
 
@@ -31,7 +29,6 @@ namespace MainLibrary.Result
             Name = "";
             ClassName = "";
             LeadTime = -1;
-          //  MethodStopwatch = new Stopwatch();
             Methods = new List<MethodInfo>();
         }
     }

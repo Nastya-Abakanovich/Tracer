@@ -1,6 +1,7 @@
 ﻿using MainLibrary;
 using MainLibrary.Result;
 using MainLibrary.Serialization;
+using MainLibrary.Writer;
 
 namespace ExampleOfUse
 {
@@ -19,7 +20,14 @@ namespace ExampleOfUse
             myThread1.Join();
             TraceResult trRes = tr.GetTraceResult();
             ISerialization ser = new XmlSerialization();
-            Console.WriteLine(ser.Serialize(trRes));
+            string str = ser.Serialize(trRes);
+
+            IWriter cWriter = new ConsoleWriter();
+            cWriter.Write(str);
+
+            IWriter fWriter = new FileWriter("1.xml");
+            fWriter.Write(str);
+
 
         }
 

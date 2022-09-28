@@ -22,7 +22,6 @@ namespace MainLibrary.Result
                 }
                 return time;
             }
-            set { }
         }
 
         public ThreadInfo()
@@ -35,5 +34,6 @@ namespace MainLibrary.Result
             Id = id;
             Methods = new List<MethodInfo>();
         }
+
     }
 }
