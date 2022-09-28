@@ -3,7 +3,6 @@ using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Result
 {
-    [XmlRoot(ElementName = "root")]
     public class TraceResult
     {
         public IReadOnlyList<ThreadInfo> Threads { get; }

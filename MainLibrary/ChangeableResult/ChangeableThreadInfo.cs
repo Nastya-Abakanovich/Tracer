@@ -54,6 +54,5 @@ namespace MainLibrary.ChangeableResult
             }
             Methods = methods;
         }
-
     }
 }

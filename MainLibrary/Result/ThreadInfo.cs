@@ -21,6 +21,5 @@ namespace MainLibrary.Result
             }
             Methods = methods;
         }
-
     }
 }
