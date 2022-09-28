@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using MainLibrary.Result;
+using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Serialization
 {
@@ -13,8 +14,8 @@ namespace MainLibrary.Serialization
     {
         public string Serialize(TraceResult result)
         {
-            string serializeResult;
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TraceResult));
+            ChangeableTraceResult changeableResult = new ChangeableTraceResult(result);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChangeableTraceResult));
 
             var settings = new XmlWriterSettings()
             {
@@ -26,7 +27,7 @@ namespace MainLibrary.Serialization
             {
                 using (var writer = XmlWriter.Create(textWriter, settings))
                 {
-                    xmlSerializer.Serialize(writer, result);
+                    xmlSerializer.Serialize(writer, changeableResult);
                 }
                 return textWriter.ToString();
             }

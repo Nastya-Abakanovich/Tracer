@@ -1,27 +1,30 @@
 ﻿using System.Diagnostics;
+using MainLibrary.ChangeableResult;
 using MainLibrary.Result;
+//using MainLibrary.Serialization;
 
 namespace MainLibrary
 {
     public class Tracer : ITracer
     {
-        private TraceResult? _traceResult;
+        private TraceResult _result;
+        private ChangeableTraceResult? _traceResult;
         private Stack<StackMethodInfo> _methodOrder;
 
         public Tracer()
         {
-            _traceResult = new TraceResult();
+            _traceResult = new ChangeableTraceResult();
             _methodOrder = new Stack<StackMethodInfo>();
         }
 
-        private ThreadInfo GetThreadId()
+        private ChangeableThreadInfo GetThreadId()
         {
-            ThreadInfo currThreadInfo;
+            ChangeableThreadInfo currThreadInfo;
             int currId = Thread.CurrentThread.ManagedThreadId;
             currThreadInfo = _traceResult.Threads.Find(x => (x.Id == currId));
             if (currThreadInfo == null)
             {
-                _traceResult?.Threads.Add(new ThreadInfo(currId));
+                _traceResult?.Threads.Add(new ChangeableThreadInfo(currId));
                 currThreadInfo = _traceResult?.Threads[_traceResult.Threads.Count - 1];
             }
             return currThreadInfo;
@@ -29,7 +32,7 @@ namespace MainLibrary
 
         public void StartTrace()
         {
-            MethodInfo currMethodInfo = new MethodInfo();
+            ChangeableMethodInfo currMethodInfo = new ChangeableMethodInfo();
             StackTrace stackTrace = new StackTrace();
             currMethodInfo.Name = stackTrace.GetFrame(1).GetMethod().Name;
             currMethodInfo.ClassName = stackTrace.GetFrame(1).GetMethod().DeclaringType.Name;
@@ -69,7 +72,10 @@ namespace MainLibrary
 
         public TraceResult GetTraceResult()
         {
-            return _traceResult;
+         //   XmlSerialization ser = new XmlSerialization();
+         //   string s = ser.Serialize(_traceResult);
+            _result = new TraceResult(_traceResult);
+            return _result;
         }
     }
 }

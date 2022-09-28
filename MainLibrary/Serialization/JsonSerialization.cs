@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MainLibrary.Result;
+using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Serialization
 {
@@ -13,8 +14,9 @@ namespace MainLibrary.Serialization
     {
         public string Serialize(TraceResult result)
         {
+            ChangeableTraceResult changeableResult = new ChangeableTraceResult(result);
             var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(result, options);
+            return JsonSerializer.Serialize(changeableResult, options);
         }
     }
 }

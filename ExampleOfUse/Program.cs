@@ -1,4 +1,5 @@
 ﻿using MainLibrary;
+using MainLibrary.ChangeableResult;
 using MainLibrary.Result;
 using MainLibrary.Serialization;
 using MainLibrary.Writer;
@@ -19,14 +20,19 @@ namespace ExampleOfUse
             Meth();
             myThread1.Join();
             TraceResult trRes = tr.GetTraceResult();
+            //Console.Read();
             ISerialization ser = new JsonSerialization();
-            string str = ser.Serialize(trRes);
+            string strjson = ser.Serialize(trRes);
+
+            ISerialization serx = new XmlSerialization();
+            string strxml = serx.Serialize(trRes);
 
             IWriter cWriter = new ConsoleWriter();
-            cWriter.Write(str);
+            cWriter.Write(strjson);
+            cWriter.Write(strxml);
 
-           // IWriter fWriter = new FileWriter("1.xml");
-           // fWriter.Write(str);
+           //  IWriter fWriter = new FileWriter("1.xml");
+           //  fWriter.Write(str);
 
 
         }

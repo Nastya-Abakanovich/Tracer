@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using System.Xml.Serialization;
+using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Result
 {
@@ -7,37 +8,42 @@ namespace MainLibrary.Result
     {
         [JsonPropertyName("id")]
         [XmlAttribute(AttributeName = "id")]
-        public int Id { get; set; }
+        public int Id { get;}
 
         [JsonPropertyName("time")]
         [XmlAttribute(AttributeName = "time")]
         public double LeadTime
         {
-            get
-            {
-                double time = 0;
-                foreach(MethodInfo method in Methods)
-                {
-                    time += method.LeadTime;
-                }
-                return time;
-            }
-            set { }
+            get;
         }
 
         [JsonPropertyName("methods")]
         [XmlElement(ElementName = "method")]
-        public List<MethodInfo> Methods { get; set; }
+        public IReadOnlyList<MethodInfo> Methods { get; }
 
         public ThreadInfo()
         {
-            Methods = new List<MethodInfo>();
+          // Methods = new List<MethodInfo>();
         }
 
         public ThreadInfo(int id)
         {
             Id = id;
             Methods = new List<MethodInfo>();
+        }
+
+        public ThreadInfo(ChangeableThreadInfo thread)
+        {
+            Id = thread.Id;
+            LeadTime = thread.LeadTime;
+
+            List<MethodInfo> methods = new List<MethodInfo>();
+
+            foreach (ChangeableMethodInfo method in thread.Methods)
+            {
+                methods.Add(new MethodInfo(method));
+            }
+            Methods = methods;
         }
 
     }

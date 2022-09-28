@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using System.Text.Json.Serialization;
+using MainLibrary.ChangeableResult;
 
 namespace MainLibrary.Result
 {
@@ -8,22 +9,23 @@ namespace MainLibrary.Result
     {
         [JsonPropertyName("threads")]
         [XmlElement(ElementName = "thread")]
-        public List<ThreadInfo> Threads { get; set; } = new List<ThreadInfo>();
+        public IReadOnlyList<ThreadInfo> Threads { get; }
 
+        public TraceResult(ChangeableTraceResult result)
+        {
+            List<ThreadInfo>  threads = new List<ThreadInfo>();
 
-        //public TraceResult()
-        //{
-        //    Threads = new List<ThreadInfo>();
-        //}
+            foreach(ChangeableThreadInfo thread in result.Threads)
+            {
+                threads.Add(new ThreadInfo(thread));
+            }
+            Threads = threads;
+        }
 
-        //public TraceResult(TraceResult result)
-        //{
-        //    Threads = new List<ThreadInfo>();
+        public TraceResult()
+        {
+            Threads = new List<ThreadInfo>();
+        }
 
-        //    foreach (var thread in result.Threads)
-        //    {
-        //        Threads.Add(thread);
-        //    }
-        //}
     }
 }
