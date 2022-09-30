@@ -21,5 +21,14 @@ namespace ExampleOfUse
 
             _tracer.StopTrace();
         }
+
+        public void MySecondMethod()
+        {
+            _tracer.StartTrace();
+            Thread.Sleep(200);
+            _bar.InnerMethod();
+
+            _tracer.StopTrace();
+        }
     }
 }

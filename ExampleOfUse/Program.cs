@@ -8,68 +8,55 @@ namespace ExampleOfUse
     internal class Program
     {
         static private Tracer _tracer;
-        static object Locker = new();
 
         static void Main()
         {
             _tracer = new Tracer();
 
             Thread thread1 = new Thread(Thread1);
-            Thread thread2 = new Thread(Thread2);
-
-            Foo foo = new Foo(_tracer);
-            
+            Thread thread2 = new Thread(Thread2);                       
           
-            thread1.Start();  // запускаем поток myThread1
+            thread1.Start();
             thread2.Start();
 
-            lock (Locker) 
-            {
-                foo.MyMethod();
-            }                
+            Foo foo = new Foo(_tracer);
+            foo.MyMethod();                          
 
             thread1.Join();
             thread2.Join();
-            TraceResult trRes = _tracer.GetTraceResult();
+            TraceResult traceResult = _tracer.GetTraceResult();
 
             ISerialization ser = new JsonSerialization();
-            string strjson = ser.Serialize(trRes);
+            string strJson = ser.Serialize(traceResult);
 
             ISerialization serx = new XmlSerialization();
-            string strxml = serx.Serialize(trRes);
+            string strXml = serx.Serialize(traceResult);
+            
+            IWriter ConsoleWriter = new ConsoleWriter();
+            ConsoleWriter.Write(strJson);
+            ConsoleWriter.Write(strXml);
 
-            IWriter cWriter = new ConsoleWriter();
-            cWriter.Write(strjson);
-            cWriter.Write(strxml);
+            IWriter FileWriterJson = new FileWriter("1.json");
+            FileWriterJson.Write(strJson);
 
-           //  IWriter fWriter = new FileWriter("1.xml");
-           //  fWriter.Write(str);
-
-
+            IWriter FileWriterXml = new FileWriter("1.xml");
+            FileWriterXml.Write(strXml);
         }
 
         static public void Thread1()
         {
             Foo foo = new Foo(_tracer);
             
-            lock (Locker)
-            {
-                foo.MyMethod();
-                foo.MyMethod();
-            }
-            
+            foo.MyMethod();
+            foo.MySecondMethod();            
         }
         static public void Thread2()
         {
             Foo foo = new Foo(_tracer);
             Bar bar = new Bar(_tracer);
-            lock (Locker)
-            {
-                foo.MyMethod();
-                bar.InnerMethod();
-            }
-
+     
+            foo.MyMethod();
+            bar.InnerMethod();       
         }
     }
-
 }
