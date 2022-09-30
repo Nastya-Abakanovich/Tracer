@@ -6,11 +6,9 @@ namespace MainLibrary.ChangeableResult
     {
         internal ChangeableMethodInfo Method;
         internal Stopwatch MethodStopwatch;
-        internal int ThreadId;
 
-        internal StackMethodInfo(int threadId, Stopwatch methodStopwatch, ChangeableMethodInfo method)
+        internal StackMethodInfo(Stopwatch methodStopwatch, ChangeableMethodInfo method)
         {
-            ThreadId = threadId;
             Method = method;
             MethodStopwatch = methodStopwatch;
         }

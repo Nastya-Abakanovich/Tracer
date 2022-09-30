@@ -38,12 +38,7 @@ namespace MainLibrary
             currMethodInfo.ClassName = stackTrace.GetFrame(1).GetMethod().DeclaringType.Name;
             currMethodInfo.LeadTime = -1;
 
-            StackMethodInfo stackMethod = new StackMethodInfo(
-                             Thread.CurrentThread.ManagedThreadId,
-                             new Stopwatch(),
-                             currMethodInfo
-                             );
-
+            StackMethodInfo stackMethod = new StackMethodInfo(new Stopwatch(), currMethodInfo);
             int threadId = Thread.CurrentThread.ManagedThreadId;
             _methodOrder.TryAdd(threadId, new ConcurrentStack<StackMethodInfo>());
             _methodOrder[threadId].Push(stackMethod);
