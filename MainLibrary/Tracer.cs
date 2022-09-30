@@ -54,7 +54,7 @@ namespace MainLibrary
 
         public void StopTrace()
         {
-            StackMethodInfo parentStackMethodInfo;
+            StackMethodInfo parentStackMethodInfo; 
             StackMethodInfo currStackMethodInfo;
             int threadId = Thread.CurrentThread.ManagedThreadId;
             _methodOrder[threadId].TryPop(out currStackMethodInfo);
