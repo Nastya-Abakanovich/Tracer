@@ -1,5 +1,4 @@
 ﻿using MainLibrary;
-using MainLibrary.ChangeableResult;
 using MainLibrary.Result;
 using MainLibrary.Serialization;
 using MainLibrary.Writer;
@@ -8,19 +7,31 @@ namespace ExampleOfUse
 {
     internal class Program
     {
-        static private Tracer tr;
-        static object locker = new();
+        static private Tracer _tracer;
+        static object Locker = new();
+
         static void Main()
         {
-            
-            tr = new Tracer();
+            _tracer = new Tracer();
 
-            Thread myThread1 = new Thread(Meth);
-            myThread1.Start();  // запускаем поток myThread1
-            Meth();
-            myThread1.Join();
-            TraceResult trRes = tr.GetTraceResult();
-            //Console.Read();
+            Thread thread1 = new Thread(Thread1);
+            Thread thread2 = new Thread(Thread2);
+
+            Foo foo = new Foo(_tracer);
+            
+          
+            thread1.Start();  // запускаем поток myThread1
+            thread2.Start();
+
+            lock (Locker) 
+            {
+                foo.MyMethod();
+            }                
+
+            thread1.Join();
+            thread2.Join();
+            TraceResult trRes = _tracer.GetTraceResult();
+
             ISerialization ser = new JsonSerialization();
             string strjson = ser.Serialize(trRes);
 
@@ -37,66 +48,28 @@ namespace ExampleOfUse
 
         }
 
-        static public void Meth()
+        static public void Thread1()
         {
-
-                C c = new C(tr);
-            lock (locker)
+            Foo foo = new Foo(_tracer);
+            
+            lock (Locker)
             {
-                c.M0();
+                foo.MyMethod();
+                foo.MyMethod();
             }
             
         }
-    }
-
-    public class C
-    {
-        private ITracer _tracer;
-
-        public C(ITracer tracer)
+        static public void Thread2()
         {
-            _tracer = tracer;
-        }
+            Foo foo = new Foo(_tracer);
+            Bar bar = new Bar(_tracer);
+            lock (Locker)
+            {
+                foo.MyMethod();
+                bar.InnerMethod();
+            }
 
-        public void M0()
-        {
-            M1();
-            M2();
-        }
-
-        private void M1()
-        {
-            _tracer.StartTrace();
-            Thread.Sleep(100);
-            M2();
-            M3();
-            M4();
-            Console.WriteLine("M1");
-            _tracer.StopTrace();
-        }
-
-        private void M2()
-        {
-            _tracer.StartTrace();
-            Thread.Sleep(200);
-            Console.WriteLine("M2");
-            _tracer.StopTrace();
-        }
-        private void M3()
-        {
-            _tracer.StartTrace();
-            Thread.Sleep(400);
-            Console.WriteLine("M3");
-            M4();
-            _tracer.StopTrace();
-        }
-
-        private void M4()
-        {
-            _tracer.StartTrace();
-            Thread.Sleep(500);
-            Console.WriteLine("M4");
-            _tracer.StopTrace();
         }
     }
+
 }
