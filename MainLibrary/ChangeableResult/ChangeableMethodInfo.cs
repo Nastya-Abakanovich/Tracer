@@ -14,9 +14,14 @@ namespace MainLibrary.ChangeableResult
         [XmlAttribute(AttributeName = "class")]
         public string ClassName { get; set; }
 
+        [XmlIgnore]
+        [JsonIgnore]
+        public double LeadTime { get; set; }
+
+
         [JsonPropertyName("time")]
         [XmlAttribute(AttributeName = "time")]
-        public double LeadTime { get; set; }
+        public string StringLeadTime { get { return $"{Math.Floor(LeadTime)}ms"; } set { } }
 
         [JsonPropertyName("methods")]
         [XmlElement(ElementName = "method")]

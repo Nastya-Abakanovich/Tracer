@@ -10,8 +10,8 @@ namespace MainLibrary.ChangeableResult
         [XmlAttribute(AttributeName = "id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("time")]
-        [XmlAttribute(AttributeName = "time")]
+        [XmlIgnore]
+        [JsonIgnore]
         public double LeadTime
         {
             get
@@ -25,6 +25,10 @@ namespace MainLibrary.ChangeableResult
             }
             set { }
         }
+
+        [JsonPropertyName("time")]
+        [XmlAttribute(AttributeName = "time")]
+        public string StringLeadTime { get { return $"{Math.Floor(LeadTime)}ms"; } set { } }
 
         [JsonPropertyName("methods")]
         [XmlElement(ElementName = "method")]
