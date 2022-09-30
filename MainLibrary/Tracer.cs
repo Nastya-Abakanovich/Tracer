@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using MainLibrary.ChangeableResult;
 using MainLibrary.Result;
 
@@ -7,12 +8,13 @@ namespace MainLibrary
     public class Tracer : ITracer
     {
         private ChangeableTraceResult _changeableTraceResult;
-        private Stack<StackMethodInfo> _methodOrder;
+        private ConcurrentDictionary<int, ConcurrentStack<StackMethodInfo>> _methodOrder;
+        private object locker = new();
 
         public Tracer()
         {
             _changeableTraceResult = new ChangeableTraceResult();
-            _methodOrder = new Stack<StackMethodInfo>();
+            _methodOrder = new ConcurrentDictionary<int, ConcurrentStack<StackMethodInfo>>();
         }
 
         private ChangeableThreadInfo GetThreadId()
@@ -42,7 +44,9 @@ namespace MainLibrary
                              currMethodInfo
                              );
 
-            _methodOrder.Push(stackMethod);
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+            _methodOrder.TryAdd(threadId, new ConcurrentStack<StackMethodInfo>());
+            _methodOrder[threadId].Push(stackMethod);
 
             stackMethod.MethodStopwatch.Start();    
         }
@@ -51,20 +55,24 @@ namespace MainLibrary
         public void StopTrace()
         {
             StackMethodInfo parentStackMethodInfo;
-            StackMethodInfo currStackMethodInfo = _methodOrder.Pop();
+            StackMethodInfo currStackMethodInfo;
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+            _methodOrder[threadId].TryPop(out currStackMethodInfo);
 
             currStackMethodInfo.MethodStopwatch?.Stop();
             currStackMethodInfo.Method.LeadTime = currStackMethodInfo.MethodStopwatch.Elapsed.TotalMilliseconds;
 
-            if (_methodOrder.Count != 0)
+            if (_methodOrder[threadId].TryPop(out parentStackMethodInfo))
             {
-                parentStackMethodInfo = _methodOrder.Pop();
                 parentStackMethodInfo.Method.Methods.Add(currStackMethodInfo.Method);
-                _methodOrder.Push(parentStackMethodInfo);
+                _methodOrder[threadId].Push(parentStackMethodInfo);
             }
             else
             {
-                GetThreadId().Methods.Add(currStackMethodInfo.Method);
+                lock (locker)
+                {
+                    GetThreadId().Methods.Add(currStackMethodInfo.Method);
+                }
             }
 
         }
