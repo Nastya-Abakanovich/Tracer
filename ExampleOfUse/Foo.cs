@@ -4,8 +4,8 @@ namespace ExampleOfUse
 {
     public class Foo
     {
-        private Bar _bar;
-        private ITracer _tracer;
+        private readonly Bar _bar;
+        private readonly ITracer _tracer;
 
         internal Foo(ITracer tracer)
         {
@@ -16,7 +16,7 @@ namespace ExampleOfUse
         public void MyMethod()
         {
             _tracer.StartTrace();
-            Thread.Sleep(100);
+            Thread.Sleep(150);
             _bar.InnerMethod();
 
             _tracer.StopTrace();
